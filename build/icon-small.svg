@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <title>Append HMI Desktop</title>
+  <rect x="1" y="1" width="30" height="30" rx="6" fill="#26333e"/>
+  <rect x="4" y="4" width="24" height="17" rx="2" fill="#1f9e58"/>
+  <path d="M 13 8.5 L 20 12.5 L 13 16.5 Z" fill="#ffffff" stroke="#ffffff" stroke-width="1.2" stroke-linejoin="round"/>
+  <circle cx="10" cy="25.5" r="2.2" fill="#2ecc71"/>
+  <circle cx="16" cy="25.5" r="2.2" fill="#ffb300"/>
+  <circle cx="22" cy="25.5" r="2.2" fill="#e74c3c"/>
+</svg>

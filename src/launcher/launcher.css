@@ -1,0 +1,335 @@
+:root
+{
+	--bg: #f4f5f7;
+	--panel: #ffffff;
+	--text: #1f2a33;
+	--muted: #66727d;
+	--border: #d5dae0;
+	--accent: #1f9e58;
+	--accent-hover: #188a4c;
+	--accent-text: #ffffff;
+	--button: #ffffff;
+	--button-hover: #eef1f4;
+	--error: #c0392b;
+	--selected: #e3f4ea;
+	color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark)
+{
+	:root
+	{
+		--bg: #1d2329;
+		--panel: #262e35;
+		--text: #e6eaee;
+		--muted: #98a3ad;
+		--border: #3a444d;
+		--accent: #27b866;
+		--accent-hover: #2fcc74;
+		--accent-text: #0e1a12;
+		--button: #2e3740;
+		--button-hover: #37424c;
+		--error: #ff7b6b;
+		--selected: #1f3a2b;
+	}
+}
+
+*
+{
+	box-sizing: border-box;
+}
+
+html, body
+{
+	height: 100%;
+	margin: 0;
+}
+
+body
+{
+	display: flex;
+	flex-direction: column;
+	background: var(--bg);
+	color: var(--text);
+	font: 14px/1.4 system-ui, "Segoe UI", Ubuntu, Cantarell, sans-serif;
+	user-select: none;
+}
+
+header
+{
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 18px 22px 14px;
+}
+
+.heading
+{
+	flex: 1;
+	min-width: 0;
+}
+
+h1
+{
+	margin: 0;
+	font-size: 20px;
+	font-weight: 600;
+}
+
+header p
+{
+	margin: 2px 0 0;
+	color: var(--muted);
+}
+
+.version
+{
+	align-self: flex-start;
+	color: var(--muted);
+	font-size: 12px;
+}
+
+main
+{
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	min-height: 0;
+	padding: 0 22px;
+}
+
+section
+{
+	background: var(--panel);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	padding: 14px 16px 16px;
+}
+
+h2
+{
+	margin: 0 0 10px;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+
+.picker
+{
+	display: flex;
+	gap: 8px;
+}
+
+.file
+{
+	flex: 1;
+	min-width: 0;
+	padding: 7px 10px;
+	border: 1px solid var(--border);
+	border-radius: 5px;
+	background: var(--bg);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	direction: rtl;
+	text-align: left;
+	user-select: text;
+}
+
+.file.empty
+{
+	direction: ltr;
+	color: var(--muted);
+}
+
+.details
+{
+	margin-top: 12px;
+	padding: 10px 12px;
+	border-left: 3px solid var(--accent);
+	background: var(--bg);
+	border-radius: 0 5px 5px 0;
+}
+
+.details.failed
+{
+	border-left-color: var(--error);
+}
+
+.name
+{
+	font-weight: 600;
+	font-size: 15px;
+}
+
+.summary
+{
+	color: var(--muted);
+	margin-top: 2px;
+}
+
+.error
+{
+	color: var(--error);
+	margin-top: 4px;
+	user-select: text;
+}
+
+.actions
+{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 14px;
+}
+
+button
+{
+	padding: 7px 14px;
+	border: 1px solid var(--border);
+	border-radius: 5px;
+	background: var(--button);
+	color: var(--text);
+	font: inherit;
+	cursor: pointer;
+}
+
+button:hover:not(:disabled)
+{
+	background: var(--button-hover);
+}
+
+button:disabled
+{
+	opacity: 0.5;
+	cursor: default;
+}
+
+button.primary
+{
+	background: var(--accent);
+	border-color: var(--accent);
+	color: var(--accent-text);
+	font-weight: 600;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+button.primary:hover:not(:disabled)
+{
+	background: var(--accent-hover);
+}
+
+.startup
+{
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 14px;
+	cursor: pointer;
+}
+
+.startup input
+{
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	accent-color: var(--accent);
+}
+
+.recent-section
+{
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	min-height: 120px;
+}
+
+.recent
+{
+	flex: 1;
+	margin: 0 -8px;
+	padding: 0;
+	list-style: none;
+	overflow-y: auto;
+}
+
+.recent li
+{
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 6px 8px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.recent li:hover
+{
+	background: var(--bg);
+}
+
+.recent li.selected
+{
+	background: var(--selected);
+}
+
+.recent li.missing
+{
+	opacity: 0.55;
+}
+
+.recent .recent-name
+{
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.recent .recent-path
+{
+	flex: 1;
+	min-width: 0;
+	color: var(--muted);
+	font-size: 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	direction: rtl;
+	text-align: left;
+}
+
+.recent .forget
+{
+	padding: 0 7px;
+	border: none;
+	background: transparent;
+	color: var(--muted);
+	font-size: 16px;
+	line-height: 22px;
+}
+
+.hint
+{
+	margin: 0;
+	color: var(--muted);
+}
+
+footer
+{
+	padding: 10px 22px 14px;
+	min-height: 40px;
+}
+
+.status
+{
+	color: var(--muted);
+	font-size: 13px;
+}
+
+.status.error
+{
+	color: var(--error);
+}

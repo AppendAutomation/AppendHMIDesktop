@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'">
+	<title>Append HMI Desktop</title>
+	<link rel="stylesheet" href="launcher.css">
+</head>
+<body>
+	<header>
+		<img src="icon.svg" alt="" width="44" height="44">
+		<div class="heading">
+			<h1 id="product">Append HMI Desktop</h1>
+			<p>Runs HMI applications made with Append HMI Studio.</p>
+		</div>
+		<span id="version" class="version"></span>
+	</header>
+
+	<main>
+		<section>
+			<h2>HMI application</h2>
+			<div class="picker">
+				<div id="file" class="file empty" data-field="file">No application chosen</div>
+				<button id="browse" data-field="browse">Browse…</button>
+			</div>
+
+			<div id="details" class="details" hidden>
+				<div id="name" class="name"></div>
+				<div id="summary" class="summary"></div>
+				<div id="error" class="error" hidden></div>
+			</div>
+
+			<div class="actions">
+				<button id="run" class="primary" data-field="run" disabled>Run now</button>
+				<button id="desktop" data-field="desktop" disabled>Create desktop shortcut</button>
+				<button id="menu" data-field="menu" disabled>Add to Start menu</button>
+			</div>
+
+			<label class="startup">
+				<input id="startup" type="checkbox" data-field="startup" disabled>
+				<span>Run this application automatically when I log in</span>
+			</label>
+		</section>
+
+		<section class="recent-section">
+			<h2>Recent</h2>
+			<ul id="recent" class="recent"></ul>
+			<p id="no-recent" class="hint" hidden>Applications you run appear here.</p>
+		</section>
+	</main>
+
+	<footer>
+		<div id="status" class="status" role="status"></div>
+	</footer>
+
+	<script src="launcher.js"></script>
+</body>
+</html>
