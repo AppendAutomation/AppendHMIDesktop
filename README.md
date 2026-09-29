@@ -3,7 +3,7 @@ Append HMI Desktop
 
 **Append HMI Desktop** runs HMI applications (`.ahmi` projects) made with [Append HMI Studio](https://github.com/AppendAutomation/AppendHMIStudio) on operator PCs. It's the Studio's runtime without the editor: nothing can be edited, saved, exported or published, which makes it smaller and simpler to deploy.
 
-![The Append HMI Desktop launcher](doc/images/launcher.png)
+![The Append HMI Desktop launcher with the LiquidWeighHMI example selected](doc/images/launcher.png)
 
 - **Run from the command line:** `append-hmi-desktop project.ahmi` runs a project.
 - **Run from the launcher:** with no project, a window opens where you pick an `.ahmi` file, then:
