@@ -78,7 +78,8 @@ test('everything the runner loads is packaged', () =>
 	for (const f of ['LICENSE', 'NOTICE', 'src/main/main.js', 'src/main/launcher-preload.cjs', 'src/launcher/index.html',
 		'studio/package.json', 'studio/src/main/electron-preload.js', 'studio/src/main/runtime/RuntimeMode.js',
 		'studio/src/main/comms/CommsSession.js', 'studio/src/main/alarms/AlarmLog.js',
-		'studio/src/main/security/UserStore.js', 'studio/src/main/retentive/RetentiveStore.js'])
+		'studio/src/main/security/UserStore.js', 'studio/src/main/retentive/RetentiveStore.js',
+		'studio/src/main/recipes/RecipeStore.js'])
 	{
 		assert.ok(packaged(configs.win.files, f), f);
 	}

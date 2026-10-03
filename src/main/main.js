@@ -29,6 +29,7 @@ import {CommsSession, validateCommsArgs} from '../../studio/src/main/comms/Comms
 import * as alarmLog from '../../studio/src/main/alarms/AlarmLog.js';
 import * as retentiveStore from '../../studio/src/main/retentive/RetentiveStore.js';
 import * as userStore from '../../studio/src/main/security/UserStore.js';
+import * as recipeStore from '../../studio/src/main/recipes/RecipeStore.js';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const __DEV__ = process.env.HMI_ENV === 'dev';
@@ -656,6 +657,14 @@ async function handleRendererRequest(contents, runtime, req)
 			return userStore.load(base, req.store);
 		case 'hmiUsers.save':
 			return userStore.save(base, req.store, req.users);
+		case 'hmiRecipes.load':
+			return recipeStore.load(base, req.store);
+		case 'hmiRecipes.save':
+			return recipeStore.save(base, req.store, req.books);
+		case 'hmiRecipes.exportCsv':
+			return recipeStore.exportCsv(dialog, BrowserWindow.fromWebContents(contents), req.defaultName, req.text);
+		case 'hmiRecipes.importCsv':
+			return recipeStore.importCsv(dialog, BrowserWindow.fromWebContents(contents));
 		case 'hmiApp.info':
 			return {name: PRODUCT_NAME, version: app.getVersion(), electron: process.versions.electron,
 				chrome: process.versions.chrome, homepage: HOMEPAGE_URL};
