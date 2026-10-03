@@ -18,8 +18,9 @@ Append HMI Desktop
   - live PLC data through the bundled `hmi-comms` server (EtherNet/IP ControlLogix/CompactLogix, SLC 5/05 and MicroLogix, Modbus TCP, simulator);
   - alarms with daily CSV history;
   - retentive tags;
-  - users and access levels.
-  - Each project keeps its own history, retentive values and runtime user changes.
+  - users and access levels;
+  - recipes, with CSV export and import.
+  - Each project keeps its own history, retentive values, runtime user changes and saved recipes.
 
 Command line
 ------------

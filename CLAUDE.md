@@ -39,11 +39,11 @@ studio/                     Submodule: AppendHMIStudio (drawio fork, comms serve
 ## How it reuses the Studio
 
 - **Renderer:** each project window loads `studio/drawio/src/main/webapp/index.html` with `chrome=0&hmiruntime=1`, so Studio's run-only renderer (`js/hmi/HmiRuntimeApp.js`) runs it.
-  - `main.js` answers the same `rendererReq` actions Studio answers for a published package: `hmiRuntime.*`, `hmiComms.*`, `hmiAlarms.*`, `hmiRetentive.*` and `hmiUsers.*`.
+  - `main.js` answers the same `rendererReq` actions Studio answers for a published package: `hmiRuntime.*`, `hmiComms.*`, `hmiAlarms.*`, `hmiRetentive.*`, `hmiUsers.*` and `hmiRecipes.*` (CSV export and import through the OS dialog).
   - Those actions are handled per window.
 - **Imported from `studio/src/main`, unchanged:**
   - `runtime/RuntimeMode.js`: window options, exit check, project reader;
-  - `comms/*`, `alarms/AlarmLog.js`, `retentive/RetentiveStore.js`, `security/UserStore.js`;
+  - `comms/*`, `alarms/AlarmLog.js`, `retentive/RetentiveStore.js`, `security/UserStore.js`, `recipes/RecipeStore.js`;
   - `electron-preload.js`, the project windows' preload.
 - **Stores:** a project's store name is its file name without the extension (`HmiRuntimeApp.info.productName`).
 - **Changing the runtime:** make the change in AppendHMIStudio first, then move the submodule. Keep the IPC protocol in step.
