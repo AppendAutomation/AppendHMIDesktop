@@ -1,7 +1,7 @@
 {
   "name": "append-hmi-desktop",
   "productName": "Append HMI Desktop",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Append HMI Desktop: runs Append HMI Studio applications (.ahmi) on operator PCs",
   "type": "module",
   "main": "src/main/main.js",
