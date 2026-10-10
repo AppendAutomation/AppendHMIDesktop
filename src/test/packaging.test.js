@@ -79,7 +79,7 @@ test('everything the runner loads is packaged', () =>
 		'studio/package.json', 'studio/src/main/electron-preload.js', 'studio/src/main/runtime/RuntimeMode.js',
 		'studio/src/main/comms/CommsSession.js', 'studio/src/main/alarms/AlarmLog.js',
 		'studio/src/main/security/UserStore.js', 'studio/src/main/retentive/RetentiveStore.js',
-		'studio/src/main/recipes/RecipeStore.js'])
+		'studio/src/main/recipes/RecipeStore.js', 'studio/src/main/print/ScreenPdf.js'])
 	{
 		assert.ok(packaged(configs.win.files, f), f);
 	}

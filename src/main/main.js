@@ -30,6 +30,7 @@ import * as alarmLog from '../../studio/src/main/alarms/AlarmLog.js';
 import * as retentiveStore from '../../studio/src/main/retentive/RetentiveStore.js';
 import * as userStore from '../../studio/src/main/security/UserStore.js';
 import * as recipeStore from '../../studio/src/main/recipes/RecipeStore.js';
+import * as screenPdf from '../../studio/src/main/print/ScreenPdf.js';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const __DEV__ = process.env.HMI_ENV === 'dev';
@@ -665,6 +666,10 @@ async function handleRendererRequest(contents, runtime, req)
 			return recipeStore.exportCsv(dialog, BrowserWindow.fromWebContents(contents), req.defaultName, req.text);
 		case 'hmiRecipes.importCsv':
 			return recipeStore.importCsv(dialog, BrowserWindow.fromWebContents(contents));
+		case 'hmiScreenPdf.capture':
+			return screenPdf.capture(contents, req.rect);
+		case 'hmiScreenPdf.save':
+			return screenPdf.save(dialog, BrowserWindow.fromWebContents(contents), req.defaultName, req.data);
 		case 'hmiApp.info':
 			return {name: PRODUCT_NAME, version: app.getVersion(), electron: process.versions.electron,
 				chrome: process.versions.chrome, homepage: HOMEPAGE_URL};
