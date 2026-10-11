@@ -43,6 +43,7 @@ studio/                     Submodule: AppendHMIStudio (drawio fork, comms serve
   - Those actions are handled per window.
 - **Imported from `studio/src/main`, unchanged:**
   - `runtime/RuntimeMode.js`: window options, exit check, project reader;
+  - `runtime/RuntimeShutdown.js`: an allowed close is held until the page has stopped its Run (`hmiRuntimeShutdown`, answered by `hmiRuntime.stopped`, at most 5 s), so On hide and On shutdown scripts run and retentive values are saved; a session end is not held;
   - `comms/*`, `alarms/AlarmLog.js`, `retentive/RetentiveStore.js`, `security/UserStore.js`, `recipes/RecipeStore.js`, `print/ScreenPdf.js`;
   - `electron-preload.js`, the project windows' preload.
 - **Stores:** a project's store name is its file name without the extension (`HmiRuntimeApp.info.productName`).
