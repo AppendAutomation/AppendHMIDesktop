@@ -30,6 +30,7 @@ import * as alarmLog from '../../studio/src/main/alarms/AlarmLog.js';
 import * as retentiveStore from '../../studio/src/main/retentive/RetentiveStore.js';
 import * as userStore from '../../studio/src/main/security/UserStore.js';
 import * as recipeStore from '../../studio/src/main/recipes/RecipeStore.js';
+import {createShutdownState, holdClose, finishShutdown} from '../../studio/src/main/runtime/RuntimeShutdown.js';
 import * as screenPdf from '../../studio/src/main/print/ScreenPdf.js';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
@@ -250,7 +251,7 @@ function isAllowed(file)
 // ------------------------------------------------------------------ projects
 
 // One window per running project
-const runtimes = new Map();   // webContents id -> {config, win, exitAllowed}
+const runtimes = new Map();   // webContents id -> {config, win, exitAllowed, shutdown}
 
 function runtimeFor(contents)
 {
@@ -317,7 +318,10 @@ function createRuntimeWindow(config)
 		}
 	}));
 
-	const runtime = {config: config, win: win, exitAllowed: config.error != null};
+	// The page stops its Run (On hide, On shutdown, last retentive save) before
+	// the window closes; a project that failed to load has no Run to stop
+	const runtime = {config: config, win: win, exitAllowed: config.error != null,
+		shutdown: createShutdownState(config.error != null)};
 	const id = win.webContents.id;
 	runtimes.set(id, runtime);
 
@@ -360,10 +364,18 @@ function createRuntimeWindow(config)
 		{
 			e.preventDefault();
 		}
+		else
+		{
+			holdClose(win, e, runtime.shutdown);
+		}
 	});
 
 	// Logging off, restarting or shutting down is never held up
-	win.on('session-end', () => { runtime.exitAllowed = true; });
+	win.on('session-end', () =>
+	{
+		runtime.exitAllowed = true;
+		runtime.shutdown.stopped = true;
+	});
 
 	win.webContents.on('render-process-gone', (e, details) =>
 	{
@@ -629,6 +641,13 @@ async function handleRendererRequest(contents, runtime, req)
 			runtime.exitAllowed = true;
 			setImmediate(() => { if (!runtime.win.isDestroyed()) runtime.win.close(); });
 			return true;
+		case 'hmiRuntime.stopped':
+			if (runtime.exitAllowed)
+			{
+				finishShutdown(runtime.win, runtime.shutdown);
+			}
+
+			return null;
 		case 'hmiRuntime.log':
 		{
 			const level = ['info', 'warn', 'error'].includes(req.level) ? req.level : 'info';
