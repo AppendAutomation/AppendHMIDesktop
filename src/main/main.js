@@ -30,6 +30,7 @@ import * as alarmLog from '../../studio/src/main/alarms/AlarmLog.js';
 import * as retentiveStore from '../../studio/src/main/retentive/RetentiveStore.js';
 import * as userStore from '../../studio/src/main/security/UserStore.js';
 import * as recipeStore from '../../studio/src/main/recipes/RecipeStore.js';
+import * as trendLog from '../../studio/src/main/trends/TrendLog.js';
 import {createShutdownState, holdClose, finishShutdown} from '../../studio/src/main/runtime/RuntimeShutdown.js';
 import * as screenPdf from '../../studio/src/main/print/ScreenPdf.js';
 
@@ -669,6 +670,22 @@ async function handleRendererRequest(contents, runtime, req)
 		}
 		case 'hmiAlarms.recent':
 			return alarmLog.recent(base, alarmLog.storeName(req.store), req.limit);
+		case 'hmiTrends.append':
+		{
+			const store = trendLog.storeName(req.store);
+			const count = await trendLog.append(base, store, req.samples);
+			const day = new Date().toDateString();
+
+			if (prunedTrendStores.get(store) !== day)
+			{
+				prunedTrendStores.set(store, day);
+				await trendLog.prune(base, store, Date.now());
+			}
+
+			return count;
+		}
+		case 'hmiTrends.query':
+			return trendLog.query(base, trendLog.storeName(req.store), req.tags, req.from, req.to, req.maxPoints);
 		case 'hmiRetentive.load':
 			return retentiveStore.load(base, req.store);
 		case 'hmiRetentive.save':
@@ -706,6 +723,7 @@ async function handleRendererRequest(contents, runtime, req)
 }
 
 const prunedAlarmStores = new Set();
+const prunedTrendStores = new Map();
 
 // ------------------------------------------------------------------ comms
 

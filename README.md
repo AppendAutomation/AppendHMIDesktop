@@ -19,8 +19,9 @@ Append HMI Desktop
   - alarms with daily CSV history;
   - retentive tags;
   - users and access levels;
-  - recipes, with CSV export and import.
-  - Each project keeps its own history, retentive values, runtime user changes and saved recipes.
+  - recipes, with CSV export and import;
+  - trends, with 7 days of history.
+  - Each project keeps its own alarm and trend history, retentive values, runtime user changes and saved recipes.
 
 Command line
 ------------
