@@ -24,7 +24,7 @@ Append HMI Desktop
   - databases: the `SQL*` script functions against Microsoft SQL Server and
     SQLite, with the data sources the project carries.
   - Each project keeps its own alarm and trend history, retentive values, runtime user changes, saved recipes and
-    database connections.
+    database credentials.
 
 Command line
 ------------
@@ -76,7 +76,11 @@ Settings, logs and project data are kept in:
 - `%APPDATA%\Append HMI Desktop` on Windows;
 - `~/.config/Append HMI Desktop` on Linux.
 
-The log is `logs/main.log`.
+The log is `logs/main.log`. Inside that folder each project has its alarm history (`alarms/`), trend history
+(`trends/`), retentive values (`retentive/`), runtime users (`users/`), saved recipes (`recipes/`) and the
+credentials this PC holds for its data sources (`datasources/`). A project whose data source is a SQLite file keeps
+it in `databases/` there, or in the user's Documents folder, whichever the data source names — the same two places
+Append HMI Studio uses. See [HMI_SQL.md](https://github.com/AppendAutomation/AppendHMIStudio/blob/main/doc/HMI_SQL.md).
 
 Desktop or Publish?
 -------------------
@@ -93,7 +97,9 @@ Append HMI Desktop reuses Append HMI Studio's run-only renderer, comms server an
   - In: the image libraries a project's images may use.
 - **Studio's main process:** replaced by a small one.
   - Out: file editing, drafts, PDF/SVG export, the Publish template and NSIS, the automation CLI, the settings and context-menu libraries.
-  - The only runtime dependency is `electron-log`.
+  - The runtime dependencies are `electron-log` and `tedious`, the SQL Server driver the `SQL*` script functions
+    need (SQLite is Node's own `node:sqlite`). Its Azure AD packages, 56 MB of it, are replaced by stubs: Azure
+    authentication is not an option a data source offers.
 - **Chromium translations:** English only.
 
 Result: installers of about 130 MB instead of 166 MB (Windows), and a 150 MB AppImage instead of 348 MB. Most of what remains is Electron itself.
