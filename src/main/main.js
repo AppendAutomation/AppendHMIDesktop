@@ -6,9 +6,10 @@
 // Each project runs in its own window through Append HMI Studio's run-only
 // renderer (studio/drawio/.../js/hmi/HmiRuntimeApp.js), with the project's
 // window mode and exit policy. PLC traffic goes through the hmi-comms server,
-// and alarm history, retentive values and runtime user changes are kept per
-// project in userData, all with Studio's own modules. None of the editor's
-// development features (editing, saving, export, publish) are here.
+// and alarm history, retentive values, runtime user changes and database
+// connections are kept per project in userData, all with Studio's own
+// modules. None of the editor's development features (editing, saving,
+// export, publish) are here.
 
 import fs from 'fs';
 import path from 'path';
@@ -26,6 +27,7 @@ import {runtimeWindowOptions, mayExit, publicRuntimeInfo, readRuntimeProject} fr
 import {CommsSupervisor, resolveExecutable as resolveCommsExecutable} from
 	'../../studio/src/main/comms/CommsSupervisor.js';
 import {CommsSession, validateCommsArgs} from '../../studio/src/main/comms/CommsSession.js';
+import {SqlSession, validateSqlArgs} from '../../studio/src/main/sql/SqlSession.js';
 import * as alarmLog from '../../studio/src/main/alarms/AlarmLog.js';
 import * as retentiveStore from '../../studio/src/main/retentive/RetentiveStore.js';
 import * as userStore from '../../studio/src/main/security/UserStore.js';
@@ -423,6 +425,7 @@ function createRuntimeWindow(config)
 	{
 		runtimes.delete(id);
 		closeCommsSession(id);
+		closeSqlSession(id);
 	});
 
 	return win;
@@ -620,6 +623,11 @@ async function handleRendererRequest(contents, runtime, req)
 		return handleCommsRequest(contents, req);
 	}
 
+	if (action.startsWith('hmiSql.'))
+	{
+		return handleSqlRequest(contents, req);
+	}
+
 	const base = app.getPath('userData');
 
 	switch (action)
@@ -815,6 +823,75 @@ async function handleCommsRequest(contents, req)
 	}
 }
 
+// ---------------------------------------------------------------- databases
+
+// The SQL* script functions, through Studio's own session and driver
+// (studio/src/main/sql). One set of connections per project window, closed
+// with it, so a database releases them when a screen is shut; a transaction
+// still open is rolled back. The renderer names a data source from the
+// project and never a file path, and a stored password is never sent back.
+const sqlSessions = new Map();
+
+function sqlEnv()
+{
+	let documents = null;
+
+	try
+	{
+		// A misconfigured Documents folder throws on Windows; the application
+		// data folder is then the only root a database file may use
+		documents = app.getPath('documents');
+	}
+	catch (e) {}
+
+	return {userData: app.getPath('userData'), documents: documents};
+}
+
+function closeSqlSession(id)
+{
+	const session = sqlSessions.get(id);
+
+	if (session != null)
+	{
+		sqlSessions.delete(id);
+		session.closeAll();
+	}
+}
+
+async function handleSqlRequest(contents, req)
+{
+	validateSqlArgs(req.action, req);
+
+	let session = sqlSessions.get(contents.id);
+
+	if (session == null)
+	{
+		session = new SqlSession(sqlEnv());
+		sqlSessions.set(contents.id, session);
+	}
+
+	switch (req.action)
+	{
+		case 'hmiSql.connect':
+			return session.connect(req);
+		case 'hmiSql.exec':
+			return session.exec(req);
+		case 'hmiSql.close':
+			return session.close(req);
+		case 'hmiSql.begin':
+			return session.transaction('begin', req);
+		case 'hmiSql.commit':
+			return session.transaction('commit', req);
+		case 'hmiSql.rollback':
+			return session.transaction('rollback', req);
+		default:
+			// Testing a connection and the stored credentials belong to the
+			// Database dialog, which a runner does not have. A credential
+			// kept on this PC is still used: connect reads it.
+			throw new Error('not available in ' + PRODUCT_NAME);
+	}
+}
+
 // ------------------------------------------------------------------ lifetime
 
 app.on('window-all-closed', () => app.quit());
@@ -841,5 +918,10 @@ app.on('will-quit', () =>
 	if (commsSupervisor != null)
 	{
 		commsSupervisor.stop();
+	}
+
+	for (const id of [...sqlSessions.keys()])
+	{
+		closeSqlSession(id);
 	}
 });

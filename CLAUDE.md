@@ -39,12 +39,12 @@ studio/                     Submodule: AppendHMIStudio (drawio fork, comms serve
 ## How it reuses the Studio
 
 - **Renderer:** each project window loads `studio/drawio/src/main/webapp/index.html` with `chrome=0&hmiruntime=1`, so Studio's run-only renderer (`js/hmi/HmiRuntimeApp.js`) runs it.
-  - `main.js` answers the same `rendererReq` actions Studio answers for a published package: `hmiRuntime.*`, `hmiComms.*`, `hmiAlarms.*`, `hmiRetentive.*`, `hmiUsers.*`, `hmiRecipes.*` (CSV export and import through the OS dialog), `hmiTrends.append/query` (the trend history) and `hmiScreenPdf.capture/save` (ScreenToPDF's window capture fallback and Save dialog).
+  - `main.js` answers the same `rendererReq` actions Studio answers for a published package: `hmiRuntime.*`, `hmiComms.*`, `hmiAlarms.*`, `hmiRetentive.*`, `hmiUsers.*`, `hmiRecipes.*` (CSV export and import through the OS dialog), `hmiTrends.append/query` (the trend history), `hmiSql.*` (the `SQL*` script functions: one `SqlSession` per project window, closed with it; the editor's own requests — testing a connection and the stored credentials — are refused) and `hmiScreenPdf.capture/save` (ScreenToPDF's window capture fallback and Save dialog).
   - Those actions are handled per window.
 - **Imported from `studio/src/main`, unchanged:**
   - `runtime/RuntimeMode.js`: window options, exit check, project reader;
   - `runtime/RuntimeShutdown.js`: an allowed close is held until the page has stopped its Run (`hmiRuntimeShutdown`, answered by `hmiRuntime.stopped`, at most 5 s), so On hide and On shutdown scripts run and retentive values are saved; a session end is not held;
-  - `comms/*`, `alarms/AlarmLog.js`, `retentive/RetentiveStore.js`, `security/UserStore.js`, `recipes/RecipeStore.js`, `trends/TrendLog.js`, `print/ScreenPdf.js`;
+  - `comms/*`, `alarms/AlarmLog.js`, `retentive/RetentiveStore.js`, `security/UserStore.js`, `recipes/RecipeStore.js`, `trends/TrendLog.js`, `sql/*`, `print/ScreenPdf.js`;
   - `electron-preload.js`, the project windows' preload.
 - **Stores:** a project's store name is its file name without the extension (`HmiRuntimeApp.info.productName`).
 - **Changing the runtime:** make the change in AppendHMIStudio first, then move the submodule. Keep the IPC protocol in step.
@@ -55,6 +55,13 @@ studio/                     Submodule: AppendHMIStudio (drawio fork, comms serve
   - The list was measured on a running project; `src/test/packaging.test.js` pins it.
   - A new file that the runtime loads must be added to both configs.
 - **`electronLanguages`:** `en-US` only; the renderer runs with `appLang=en`.
+- **The SQL Server driver is this package's own dependency:** `tedious` is in
+  `package.json` here as well as in Studio's, because the `SQL*` functions run
+  through `studio/src/main/sql` but npm resolves from this package's
+  `node_modules` and `studio/node_modules` is not shipped. Its Azure AD half
+  (about 43 MB that cannot run here) is left out and Studio's stubs
+  (`studio/build/sql-stubs`) are mapped over the top; `packaging.test.js` pins
+  both.
 - **Comms server:** `studio/comms/publish/<platform>-x64` → `resources/comms`.
 - **Windows:** electron-builder builds `--dir` only; `scripts/dist-win.mjs` compiles the installer with the fetched makensis (`build/nsis`, git-ignored). Unsigned.
 

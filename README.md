@@ -20,8 +20,11 @@ Append HMI Desktop
   - retentive tags;
   - users and access levels;
   - recipes, with CSV export and import;
-  - trends, with 7 days of history.
-  - Each project keeps its own alarm and trend history, retentive values, runtime user changes and saved recipes.
+  - trends, with 7 days of history;
+  - databases: the `SQL*` script functions against Microsoft SQL Server and
+    SQLite, with the data sources the project carries.
+  - Each project keeps its own alarm and trend history, retentive values, runtime user changes, saved recipes and
+    database connections.
 
 Command line
 ------------
