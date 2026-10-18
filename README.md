@@ -22,6 +22,8 @@ Append HMI Desktop
   - recipes, with CSV export and import;
   - trends, with 7 days of history;
   - list boxes the operator picks from, filled by the `List*` script functions;
+  - popup windows the operator moves by dragging their title bar, drawn in the
+    height, font and colors the project sets;
   - databases: the `SQL*` script functions against Microsoft SQL Server and
     SQLite, with the data sources the project carries.
   - Each project keeps its own alarm and trend history, retentive values, runtime user changes, saved recipes and
