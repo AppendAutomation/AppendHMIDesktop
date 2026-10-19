@@ -22,6 +22,8 @@ Append HMI Desktop
   - recipes, with CSV export and import;
   - trends, with 7 days of history;
   - list boxes the operator picks from, filled by the `List*` script functions;
+  - the date and time: the clock system tags, `Now(format)` and `_Now` in the
+    format `_TimeFormat` holds;
   - popup windows the operator moves by dragging their title bar, drawn in the
     height, font and colors the project sets;
   - databases: the `SQL*` script functions against Microsoft SQL Server and
