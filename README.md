@@ -26,6 +26,8 @@ Append HMI Desktop
     format `_TimeFormat` holds;
   - popup windows the operator moves by dragging their title bar, drawn in the
     height, font and colors the project sets;
+  - the project's touch background color, which every object with a touch
+    animation is drawn in while the operator holds it down;
   - databases: the `SQL*` script functions against Microsoft SQL Server and
     SQLite, with the data sources the project carries.
   - Each project keeps its own alarm and trend history, retentive values, runtime user changes, saved recipes and
