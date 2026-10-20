@@ -67,7 +67,7 @@ studio/                     Submodule: AppendHMIStudio (drawio fork, comms serve
 
 ## Behaviour to keep
 
-- **Exit policy:** project windows close only as the project's exit policy allows: Ctrl+Alt+Shift+Q, the password prompt, or never.
+- **Exit policy:** project windows close only as the project's exit policy allows: Ctrl+Alt+Shift+Q, the password prompt, closing the window normally (`close`, where the close button and Alt+F4 work, the shortcut too), or never.
   - The operating system always wins: `before-quit` (Linux SIGTERM/SIGINT) and `session-end` (Windows).
 - **Single instance:** a second start hands its project to the running instance. A project already open is focused.
 - **Launcher paths:** the launcher may act only on paths from the OS dialog, the command line or the recent list (`allowedPaths`).

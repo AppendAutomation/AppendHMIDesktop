@@ -10,6 +10,7 @@
 	const MODES = {kiosk: 'Kiosk (full screen, locked)', fullscreen: 'Full screen', window: 'Window'};
 	const EXITS = {
 		shortcut: 'exit with Ctrl+Alt+Shift+Q',
+		close: 'close the window, or Ctrl+Alt+Shift+Q',
 		password: 'exit with Ctrl+Alt+Shift+Q and a password',
 		never: 'cannot be exited'
 	};

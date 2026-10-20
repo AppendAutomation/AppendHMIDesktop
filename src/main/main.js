@@ -22,7 +22,7 @@ import {loadProjectConfig, describe, isProjectFile} from './project.js';
 import {Settings} from './settings.js';
 import {Shortcuts, shortcutDirs, launchCommand} from './shortcuts.js';
 import {PRODUCT_NAME, HOMEPAGE_URL} from './brand.js';
-import {runtimeWindowOptions, mayExit, publicRuntimeInfo, readRuntimeProject} from
+import {runtimeWindowOptions, mayExit, closesNormally, publicRuntimeInfo, readRuntimeProject} from
 	'../../studio/src/main/runtime/RuntimeMode.js';
 import {CommsSupervisor, resolveExecutable as resolveCommsExecutable} from
 	'../../studio/src/main/comms/CommsSupervisor.js';
@@ -323,7 +323,10 @@ function createRuntimeWindow(config)
 
 	// The page stops its Run (On hide, On shutdown, last retentive save) before
 	// the window closes; a project that failed to load has no Run to stop
-	const runtime = {config: config, win: win, exitAllowed: config.error != null,
+	// A 'close' exit lets the window close as any program's does, with its
+	// close button or Alt+F4; the Run still stops first
+	const runtime = {config: config, win: win,
+		exitAllowed: config.error != null || closesNormally(config),
 		shutdown: createShutdownState(config.error != null)};
 	const id = win.webContents.id;
 	runtimes.set(id, runtime);
@@ -405,7 +408,7 @@ function createRuntimeWindow(config)
 
 		event.preventDefault();
 
-		if (config.error != null || config.exit.mode === 'shortcut')
+		if (config.error != null || config.exit.mode === 'shortcut' || config.exit.mode === 'close')
 		{
 			log.info(config.productName + ': exit by shortcut');
 			runtime.exitAllowed = true;

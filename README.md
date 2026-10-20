@@ -12,7 +12,7 @@ Append HMI Desktop
   - tick **Run automatically when I log in**.
 - **Each project runs as its author set it up** in Studio (HMI > Application Settings):
   - kiosk, full screen or a window at the project's resolution;
-  - exit with Ctrl+Alt+Shift+Q, with Ctrl+Alt+Shift+Q and a password, or not at all.
+  - exit with Ctrl+Alt+Shift+Q, by closing the window as any program's (its close button or Alt+F4), with Ctrl+Alt+Shift+Q and a password, or not at all.
 - **Several projects at once**, one window each (for example one per monitor). Starting a project that is already running brings its window forward.
 - **Everything the Studio's Run does** comes with it:
   - live PLC data through the bundled `hmi-comms` server (EtherNet/IP ControlLogix/CompactLogix, SLC 5/05 and MicroLogix, Modbus TCP, simulator);

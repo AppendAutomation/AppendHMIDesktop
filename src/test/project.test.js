@@ -5,6 +5,7 @@ import os from 'os';
 import path from 'path';
 import {parseProjectConfig, loadProjectConfig, projectName, isProjectFile, elementAttributes, describe} from
 	'../main/project.js';
+import {closesNormally} from '../../studio/src/main/runtime/RuntimeMode.js';
 
 const project = (settings) => '<mxfile hmiVersion="1"><diagram name="Main"><mxGraphModel><root>' +
 	'<mxCell id="0"/></root></mxGraphModel></diagram>\n<hmiProject version="1">\n<devices/>\n<tags/>\n' +
@@ -31,6 +32,15 @@ test('the project\'s runtime settings', () =>
 	assert.equal(c.width, 1920);
 	assert.equal(c.height, 1080);
 	assert.deepEqual(c.exit, {mode: 'password', salt: '00ff', hash: hash.toLowerCase()});
+});
+
+test('a close exit lets the window close itself', () =>
+{
+	const c = parseProjectConfig(project('<settings width="1024" height="768">' +
+		'<runtime windowMode="window" exit="close"/></settings>'), '/p/x.ahmi');
+	assert.equal(c.exit.mode, 'close');
+	assert.equal(closesNormally(c), true);
+	assert.equal(describe(c).exitMode, 'close');
 });
 
 test('a password exit without its hash is refused', () =>
